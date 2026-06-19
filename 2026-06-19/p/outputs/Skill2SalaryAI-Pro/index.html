@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skill2Salary AI Pro</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <canvas id="network"></canvas>
+    <div class="aurora aurora-one"></div>
+    <div class="aurora aurora-two"></div>
+
+    <main id="app">
+      <section id="authView" class="auth-shell">
+        <div class="auth-copy">
+          <div class="brand-mark">S2S</div>
+          <h1>Skill2Salary AI</h1>
+          <p>Turn your resume into a live career map with salary insights, skill gaps, roadmap actions, and an AI-style coach.</p>
+          <div class="hero-stats">
+            <span><strong>Live</strong> score</span>
+            <span><strong>3D-like</strong> motion</span>
+            <span><strong>1 min</strong> setup</span>
+          </div>
+        </div>
+
+        <form id="loginForm" class="glass auth-card">
+          <h2>Start your cockpit</h2>
+          <label>
+            Your name
+            <input id="nameInput" type="text" placeholder="Example: Arjun" required />
+          </label>
+          <label>
+            Target role
+            <select id="roleInput">
+              <option>AI Engineer</option>
+              <option>Data Scientist</option>
+              <option>ML Engineer</option>
+              <option>Full-Stack Developer</option>
+              <option>Data Analyst</option>
+              <option>Product Manager</option>
+            </select>
+          </label>
+          <button type="submit">Enter dashboard</button>
+          <p class="micro">No password. No signup friction. Your data stays in this browser.</p>
+        </form>
+      </section>
+
+      <section id="dashboardView" class="dashboard hidden">
+        <aside class="sidebar glass">
+          <div>
+            <div class="brand-row">
+              <div class="brand-mark small">S2S</div>
+              <div>
+                <strong>Skill2Salary</strong>
+                <span>AI Pro</span>
+              </div>
+            </div>
+            <nav>
+              <button class="nav-btn active" data-panel="overview">Overview</button>
+              <button class="nav-btn" data-panel="resume">Resume AI</button>
+              <button class="nav-btn" data-panel="salary">Salary Lab</button>
+              <button class="nav-btn" data-panel="roadmap">Roadmap</button>
+              <button class="nav-btn" data-panel="coach">AI Coach</button>
+            </nav>
+          </div>
+          <button id="resetBtn" class="ghost">Reset profile</button>
+        </aside>
+
+        <section class="workspace">
+          <header class="topbar">
+            <div>
+              <p id="welcomeText" class="eyebrow">Welcome</p>
+              <h2 id="roleTitle">Career Intelligence Dashboard</h2>
+            </div>
+            <div class="pulse-chip"><span></span> Live analysis</div>
+          </header>
+
+          <section id="overview" class="panel active-panel">
+            <div class="grid metrics">
+              <article class="glass metric">
+                <p>Career Score</p>
+                <strong id="careerScore">72</strong>
+                <small>profile readiness</small>
+              </article>
+              <article class="glass metric">
+                <p>Salary Estimate</p>
+                <strong id="salaryEstimate">$118k</strong>
+                <small>current prediction</small>
+              </article>
+              <article class="glass metric">
+                <p>Skill Match</p>
+                <strong id="skillMatch">64%</strong>
+                <small>target role fit</small>
+              </article>
+              <article class="glass metric">
+                <p>Next Action</p>
+                <strong id="nextAction">Build</strong>
+                <small>portfolio proof</small>
+              </article>
+            </div>
+
+            <div class="grid main-grid">
+              <article class="glass chart-card">
+                <div class="card-head">
+                  <h3>Career Radar</h3>
+                  <span>interactive</span>
+                </div>
+                <canvas id="radarChart" width="520" height="360"></canvas>
+              </article>
+              <article class="glass chart-card">
+                <div class="card-head">
+                  <h3>Salary Growth</h3>
+                  <span>5 year path</span>
+                </div>
+                <canvas id="growthChart" width="520" height="360"></canvas>
+              </article>
+            </div>
+
+            <article class="glass action-strip">
+              <div>
+                <h3>Recommended focus</h3>
+                <p id="focusText">Paste your resume to unlock personalized gaps and salary movement.</p>
+              </div>
+              <button class="jump-btn" data-panel="resume">Analyze resume</button>
+            </article>
+          </section>
+
+          <section id="resume" class="panel">
+            <div class="grid two-col">
+              <article class="glass">
+                <div class="card-head">
+                  <h3>Resume AI Analyzer</h3>
+                  <span>paste or type</span>
+                </div>
+                <textarea id="resumeText" placeholder="Paste your resume text here. Include skills, projects, experience, links, and achievements."></textarea>
+                <div class="controls-row">
+                  <button id="analyzeBtn">Analyze now</button>
+                  <button id="sampleBtn" class="ghost">Use sample</button>
+                </div>
+              </article>
+              <article class="glass">
+                <div class="card-head">
+                  <h3>Extracted Skills</h3>
+                  <span id="skillCount">0 found</span>
+                </div>
+                <div id="skillCloud" class="skill-cloud"></div>
+                <div class="score-ring">
+                  <svg viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="50"></circle>
+                    <circle id="atsRing" cx="60" cy="60" r="50"></circle>
+                  </svg>
+                  <div><strong id="atsScore">0%</strong><span>ATS score</span></div>
+                </div>
+              </article>
+            </div>
+            <article class="glass">
+              <h3>Instant Fixes</h3>
+              <ul id="resumeTips" class="tips"></ul>
+            </article>
+          </section>
+
+          <section id="salary" class="panel">
+            <div class="glass lab">
+              <div class="card-head">
+                <h3>Realtime Salary Lab</h3>
+                <span>move sliders</span>
+              </div>
+              <div class="slider-grid">
+                <label>Experience <strong id="expValue">3 yrs</strong><input id="experience" type="range" min="0" max="18" value="3" /></label>
+                <label>Skill depth <strong id="depthValue">6</strong><input id="skillDepth" type="range" min="1" max="15" value="6" /></label>
+                <label>Portfolio proof <strong id="proofValue">4</strong><input id="proof" type="range" min="0" max="10" value="4" /></label>
+              </div>
+              <div class="salary-live">
+                <strong id="salaryLive">$118,000</strong>
+                <span id="salaryRange">$101,000 - $135,000 likely range</span>
+              </div>
+              <canvas id="salaryChart" width="920" height="330"></canvas>
+            </div>
+          </section>
+
+          <section id="roadmap" class="panel">
+            <article class="glass">
+              <div class="card-head">
+                <h3>90-Day Impact Roadmap</h3>
+                <span>less features, more impact</span>
+              </div>
+              <div id="roadmapList" class="roadmap-list"></div>
+            </article>
+          </section>
+
+          <section id="coach" class="panel">
+            <article class="glass coach">
+              <div class="card-head">
+                <h3>AI Career Coach</h3>
+                <span>chat style</span>
+              </div>
+              <div id="chatLog" class="chat-log"></div>
+              <form id="chatForm" class="chat-form">
+                <input id="chatInput" type="text" placeholder="Ask: how do I increase salary fast?" />
+                <button type="submit">Send</button>
+              </form>
+            </article>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
